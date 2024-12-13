@@ -27,13 +27,24 @@ pipeline {
         //         sh "${scannerHome}/bin/sonar-scanner"
         //     }
         // }
+        // stage('SonarQube analysis') {
+        //     tools {
+        //         sonarQube 'sonar-scanner-tool'
+        //     }
+        //     steps {
+        //         withSonarQubeEnv(credentialsId: 'SonarQube', installationName: 'Sonar') {
+        //             sh 'sonar-scanner'
+        //         }
+        //     }
+        // }
         stage('SonarQube analysis') {
-            tools {
-                sonarQube 'sonar-scanner-tool'
-            }
             steps {
+                script {
+                    // requires SonarQube Scanner 2.8+
+                    scannerHome = tool 'sonar-scanner-tool'
+                }
                 withSonarQubeEnv(credentialsId: 'SonarQube', installationName: 'Sonar') {
-                    sh 'sonar-scanner'
+                    sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
